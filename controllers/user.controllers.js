@@ -13,7 +13,7 @@ const usuariosGet = async(req= request,res=response, next) => {
             Usuario.countDocuments({estado:true}),
             Usuario.find({estado:true})
             .skip(parseInt(desde))
-                .limit(parseInt(limite))
+            .limit(parseInt(limite))
     ])
 
 
