@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers/user.controllers');
 const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validar.middleware');
+const { validarCampos, validarJSON } = require('../middlewares/validar.middleware');
 const { esRoleValido, emailExiste, existeUsuarioId } = require('../helpers/db-validator');
 
 router.get('/get',controllers.usuariosGet);
@@ -20,6 +20,7 @@ router.post('/post',[
     // check('rol','No es un rol valido').isIn(['ADMIN_ROLE','USER_ROLE']),
     // check('rol').custom(rol=>esRoleValido(rol)),
     check('rol').custom(esRoleValido),
+    validarJSON,
     validarCampos
 ],controllers.usuariosPost);
 router.delete('/delete/:id',[

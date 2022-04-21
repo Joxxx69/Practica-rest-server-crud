@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { dbConnection } = require('../database/config');
+const { validarJSON, validarCampos } = require('../middlewares/validar.middleware');
 
 
 class Server{
@@ -30,6 +31,7 @@ class Server{
         this.app.use(express.json());
         // Directorio Publico
         this.app.use(express.static('public'));
+        this.app.use(validarJSON,validarCampos);
     }
     routes(){
        this.app.use(this.usuariosPath,require('../routes/user.routes'));

@@ -8,6 +8,15 @@ const validarCampos = (req,res,next) => {
     next();
 }
 
+// este middleware validara el json que enviemos,para evitar que colapse la ejecucion
+const validarJSON = (err,req,res,next) => {
+    if(err instanceof SyntaxError && err.status === 400 && 'body' in err){
+        return res.status(400).json({status:400,msg:err.message})
+    }
+    next();
+}
+
 module.exports={
-    validarCampos
+    validarCampos,
+    validarJSON
 }

@@ -33,6 +33,7 @@ const usuariosPost = async(req= request,res=response, next) => {
 
 const usuariosPut = async(req= request,res=response, next) => {  
     const {id} = req.params;
+    
     const {password,google,correo,...resto}= req.body;
     if(password){
         resto.password = bcrypt.hashSync(password,10);
