@@ -47,9 +47,13 @@ const usuariosPatch = (req= request,res=response, next) => {
 }
 const usuariosDelete = async(req= request,res=response, next) => {
     const {id} = req.params;
+    // const uid = req.uid;
+    
     // const borrar = await Usuario.findByIdAndDelete(id,{new:true});  // no se debe borrar debido a la integridad referencial, siempre va a existir
     const usuario = await Usuario.findByIdAndUpdate(id,{estado:false})
-    res.json({msg:'Delete api- controlador',usuario});
+    const usuarioAutenticado = req.usuario;
+
+    res.json({msg:'Delete api- controlador',usuario, usuarioAutenticado});
 }
 
 module.exports = {
