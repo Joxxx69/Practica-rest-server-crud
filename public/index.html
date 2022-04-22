@@ -80,11 +80,11 @@
             console.log(google.accounts.id);
             console.log(google.accounts.id.disableAutoSelect)
             google.accounts.id.disableAutoSelect();
+            google.accounts.id.revoke(localStorage.getItem('email'),done=>{
+                localStorage.clear();
+                location.reload();
+            })
             if(localStorage.getItem('email')){
-                google.accounts.id.revoke(localStorage.getItem('email'),done=>{
-                    localStorage.clear();
-                    location.reload();
-                })
 
             }
         }
