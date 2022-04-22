@@ -4,9 +4,84 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Google sign in</title>
 </head>
 <body>
-    <h1>Acceso Denegado</h1>
+    <h1>Google sign in</h1>
+    <hr>
+    <div id="g_id_onload"
+         data-client_id="852962892463-dp3e50cc8809k55h1bsroabp2e9s9n5u.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"  
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+    </div>
+    <hr>
+    <button id="google_signout"
+            class="g_id_signout">
+            Sign out
+    </button>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function decodeJwtResponse(token) {
+            let base64Url = token.split('.')[1];
+            let base64 = base64Url.replace('-', '+').replace('_', '/');
+            return JSON.parse(window.atob(base64));
+        };
+         function handleCredentialResponse(response) {
+            // decodeJwtResponse() is a custom function defined by you
+            // to decode the credential response.
+
+
+            // Google Token: ID_TOKEN
+            const body = {id_token: response.credential}
+            console.log(response.credential)
+            fetch('http://localhost:8080/api/auth/google',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+            .then(res=> res.json())
+            .then(res =>{
+                console.log(res)
+                console.log(res.usuario.correo)
+                console.log(res.usuario)
+                localStorage.setItem('email',res.usuario.correo)
+                // location.reload();
+            
+            })  
+            .catch(console.warn)
+            const responsePayload = decodeJwtResponse(response.credential);
+
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log('Given Name: ' + responsePayload.given_name);
+            console.log('Family Name: ' + responsePayload.family_name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
+        }
+        const button = document.querySelector('#google_signout');
+        button.onclick =()=>{
+            console.log(google.accounts)
+            console.log(google.accounts.id);
+            console.log(google.accounts.id.disableAutoSelect)
+            google.accounts.id.disableAutoSelect();
+            if(localStorage.getItem('email')){
+                google.accounts.id.revoke(localStorage.getItem('email'),done=>{
+                    localStorage.clear();
+                    location.reload();
+                })
+
+            }
+        }
+    </script>
 </body>
 </html>

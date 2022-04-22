@@ -21,7 +21,7 @@ const userSchema = new Schema({
     },
     rol:{
         type:String,
-        required:true,
+        required:[true,'El rol es requerido'],
         enum:['ADMIN_ROLE', 'USER_ROLE','VENTAS_ROLE']   // puedo comentar el enum, ya que valido con una coleccion.
     },
     estado:{
